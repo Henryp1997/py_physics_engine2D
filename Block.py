@@ -8,6 +8,10 @@ class Block(PhysicsObject):
         super().__init__(*args, is_static=is_static, has_gravity=has_gravity, **kwargs)
         self.width = width
         self.height = height
+        self.left = self.pos[0]
+        self.right = self.left + self.width
+        self.top = self.pos[1]
+        self.bottom = self.top + self.height
     
 
     def draw(self, artist: Artist, colour: str, linewidth=0):
