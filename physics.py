@@ -9,29 +9,18 @@ from Block import Block
 
 class Engine():
     def __init__(self, artist) -> None:
-        self.frame_time = 0
         self.artist = artist
-
-
-    def frame_dur(self) -> float:
-        """ Return the duration of a frame in milliseconds """
-        current_time = time.perf_counter()
-        dt = current_time - self.frame_time
-        self.frame_time = current_time
-        return dt
 
 
 def start_engine():
     artist = Artist(SCREEN_X=400, SCREEN_Y=400)
-    engine = Engine(artist)
     collider = CollisionSystem()
     clock = pg.time.Clock()
 
     # Main loop
     count = 0
     while True:
-        engine.frame_time = time.perf_counter() # Keep track of frame time for speed calculations
-        clock.tick(60)
+        dt = clock.tick(60) / 1000 # Milliseconds --> seconds
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -43,27 +32,45 @@ def start_engine():
 
         if count == 0:
             particle = Particle(
-                pos=[artist.SCREEN_X*0.5, artist.SCREEN_Y*0.75],
-                vel=[100, -50],
+                pos=[artist.SCREEN_X*0.7, artist.SCREEN_Y*0.75],
+                vel=[240, -288],
                 acc=None,
                 radius=4,
                 mass=2
             )
-            block = Block(
+            block1 = Block(
                 pos=[artist.SCREEN_X*0.9, artist.SCREEN_Y*0.5],
                 width=15,
                 height=40,
                 # mass=20 # 10 times heavier than particle
             )
+            block2 = Block(
+                pos=[artist.SCREEN_X*0.5, artist.SCREEN_Y*0.1],
+                width=60,
+                height=5,
+                # mass=20 # 10 times heavier than particle
+            )
+
+            block3 = Block( 
+                pos=[artist.SCREEN_X*0.1, artist.SCREEN_Y*0.6],
+                width=5,
+                height=80,
+                # mass=20 # 10 times heavier than particle
+            )
+
+        # Move objects
+        particle.move(dt)
 
         # Collisions
-        collider.check_collision(particle, block)
+        collider.check_collision(particle, block1, dt)
+        collider.check_collision(particle, block2, dt)
+        collider.check_collision(particle, block3, dt)
 
         # Draw objects
-        dt = engine.frame_dur()
-        particle.move(dt)
         particle.draw(artist, "#FFFFFF")
-        block.draw(artist, "#FFFFFF")
+        block1.draw(artist, "#FFFFFF")
+        block2.draw(artist, "#FFFFFF")
+        block3.draw(artist, "#FFFFFF")
         count += 1
         pg.display.update()
 

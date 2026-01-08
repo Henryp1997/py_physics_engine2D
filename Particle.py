@@ -4,8 +4,9 @@ from PhysicsObject import PhysicsObject
 
 
 class Particle(PhysicsObject):
-    def __init__(self, *args, radius=10, is_static=False, **kwargs):
-        super().__init__(*args, is_static=is_static, **kwargs)
+    """ Moving particle object """
+    def __init__(self, *args, radius=10, **kwargs):
+        super().__init__(*args, is_static=False, **kwargs)
         self.radius = radius
     
 

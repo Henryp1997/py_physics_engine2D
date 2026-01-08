@@ -1,3 +1,4 @@
+from copy import deepcopy
 import pygame as pg
 from abc import ABC, abstractmethod
 
@@ -13,6 +14,9 @@ class PhysicsObject(ABC):
 
         if not self.is_static and self.vel is None:
             raise ValueError("PhysicsObject: cannot set is_static=False and vel=None")
+    
+        if self.is_static and self.vel is not None:
+            raise ValueError("PhysicsObject: cannot set is_static=True and a real velocity. Velocity must be set to None")
         
         if self.mass is not None and self.is_static:
             print(
@@ -26,6 +30,7 @@ class PhysicsObject(ABC):
 
     def move(self, dt):
         """ Update the object's position in 2D space """
+        self.prev_pos = deepcopy(self.pos) # Previous (frame before current) position vector
         self.pos[0] += dt * self.vel[0]
         self.pos[1] += dt * self.vel[1]
 
