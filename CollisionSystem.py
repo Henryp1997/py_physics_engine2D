@@ -13,7 +13,7 @@ class CollisionSystem():
     def check_collision(self, a: PhysicsObject, b: PhysicsObject, dt):
         """ Check whether two PhysicsObjects have collided """
         if isinstance(a, Particle) and isinstance(b, Block):
-            return self.particle_block(dt)
+            return self.particle_block(a, b, dt)
         
     
     def particle_block(self, a: PhysicsObject, b: PhysicsObject, dt):
